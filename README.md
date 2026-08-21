@@ -14,7 +14,7 @@ selected words
 * Training for studying words
 
 
-# =========install=====================
+# =========install========
 You need Qt >= 7.0 and glib >= 2.0 in order to install QStarDict.
 
 On Debian and Ubuntu these dependencies can be installed by running
