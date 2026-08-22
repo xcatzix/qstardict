@@ -1,0 +1,73 @@
+/*****************************************************************************
+ * dictbrowsersearch.cpp - QStarDict, a dictionary application for learning  *
+ *                         languages                                         *
+ * Copyright (C) 2007 Petr Vanek                                             *
+ *                                                                           *
+ * This program is free software; you can redistribute it and/or modify      *
+ * it under the terms of the GNU General Public License as published by      *
+ * the Free Software Foundation; either version 2 of the License, or         *
+ * (at your option) any later version.                                       *
+ *                                                                           *
+ * This program is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ * GNU General Public License for more details.                              *
+ *                                                                           *
+ * You should have received a copy of the GNU General Public License along   *
+ * with this program; if not, write to the Free Software Foundation, Inc.,   *
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               *
+ *****************************************************************************/
+
+#include "dictbrowsersearch.h"
+
+
+namespace QStarDict
+{
+
+DictBrowserSearch::DictBrowserSearch(QWidget *parent) :
+    QWidget(parent)
+{
+    setupUi(this);
+
+    connect(searchEdit, &QLineEdit::textEdited,
+            this, &DictBrowserSearch::searchAll);
+    connect(caseSensitiveCheckBox, &QCheckBox::clicked,
+            this, &DictBrowserSearch::searchAll);
+    connect(wholeWordsCheckBox, &QCheckBox::clicked,
+            this, &DictBrowserSearch::searchAll);
+}
+
+void DictBrowserSearch::searchAll()
+{
+    QTextDocument::FindFlags f = { };
+    if (caseSensitiveCheckBox->isChecked())
+        f |= QTextDocument::FindCaseSensitively;
+    if (wholeWordsCheckBox->isChecked())
+        f |= QTextDocument::FindWholeWords;
+    emit search(searchEdit->text(), f);
+}
+
+void DictBrowserSearch::searchResult(bool success)
+{
+    QPalette p;
+    if (!success)
+    {
+        p.setColor(QPalette::Base, Qt::red);
+    }
+    searchEdit->setPalette(p);
+}
+
+void DictBrowserSearch::showEvent(QShowEvent * event)
+{
+    QWidget::showEvent(event);
+    searchEdit->setFocus(Qt::OtherFocusReason);
+    if (searchEdit->text().length())
+        searchAll();
+}
+
+void DictBrowserSearch::closeEvent(QCloseEvent * event)
+{
+    QWidget::closeEvent(event);
+}
+
+} // namespace

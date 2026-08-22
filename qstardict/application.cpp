@@ -1,0 +1,152 @@
+/*****************************************************************************
+ * application.cpp - QStarDict, a dictionary application for learning        *
+ *                   languages                                               *
+ * Copyright (C) 2008 Alexander Rodin                                        *
+ *                                                                           *
+ * This program is free software; you can redistribute it and/or modify      *
+ * it under the terms of the GNU General Public License as published by      *
+ * the Free Software Foundation; either version 2 of the License, or         *
+ * (at your option) any later version.                                       *
+ *                                                                           *
+ * This program is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ * GNU General Public License for more details.                              *
+ *                                                                           *
+ * You should have received a copy of the GNU General Public License along   *
+ * with this program; if not, write to the Free Software Foundation, Inc.,   *
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               *
+ *****************************************************************************/
+
+#include "application.h"
+
+#ifdef QSTARDICT_WITH_TRANSLATIONS
+#include <QLibraryInfo>
+#include <QLocale>
+#include <QTranslator>
+#include <QStringList>
+#endif // QSTARDICT_WITH_TRANSLATIONS
+
+#include <QKeySequence>
+#include <QSettings>
+#include "../qxt/qxtglobalshortcut.h"
+
+#include "dictcore.h"
+#include "ipaspeaker.h"
+#include "mainwindow.h"
+#include "popupwindow.h"
+#include "speaker.h"
+#include "trainer.h"
+#include "tray.h"
+#include "vocabulary.h"
+#ifdef QSTARDICT_WITH_DBUS
+#include "dbusadaptor.h"
+#endif // QSTARDICT_WITH_DBUS
+
+namespace QStarDict
+{
+
+Application::Application(int &argc, char **argv)
+    : QApplication(argc, argv)
+{
+    setOrganizationName("qstardict");
+    setApplicationName("qstardict");
+    QSettings settings;
+    setApplicationVersion(QSTARDICT_VERSION);
+    setQuitOnLastWindowClosed(false);
+
+#ifdef QSTARDICT_WITH_TRANSLATIONS
+    m_translator = new QTranslator;
+#ifdef Q_WS_MAC
+    QString binPath = QCoreApplication::applicationDirPath();
+    // navigate through mac's bundle tree structore
+    (void)m_translator->load("qstardict-" + QLocale::system().name(), binPath + "/../i18n/");
+#else
+    (void)m_translator->load("qstardict-" + QLocale::system().name(), QSTARDICT_TRANSLATIONS_DIR);
+#endif
+    (void)installTranslator(m_translator);
+    m_qtTranslator = new QTranslator;
+    (void)m_qtTranslator->load("qt_" + QLocale::system().name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+    (void)installTranslator(m_qtTranslator);
+#endif // QSTARDICT_WITH_TRANSLATIONS
+
+    m_dictCore = new DictCore;
+    m_popupWindow = new PopupWindow;
+    m_popupWindow->setDict(m_dictCore);
+    m_speaker = new Speaker;
+    m_speaker->setSpeechCmd(settings.value("Speaker/speechCmd", "espeak").toString());
+    m_ipaSpeaker = new IpaSpeaker;
+    m_ipaSpeaker->setSpeechCmd(settings.value("Speaker/espeakCmd", "espeak").toString());
+    m_tray = new Tray;
+    m_popupShortcut = new QxtGlobalShortcut;
+    m_mainWindow = new MainWindow;
+    m_mainWindow->setDict(m_dictCore);
+#ifdef QSTARDICT_WITH_DBUS
+    m_dbusAdaptor = new DBusAdaptor(m_mainWindow);
+#endif // QSTARDICT_WITH_DBUS
+
+    m_popupShortcut =
+        new QxtGlobalShortcut(QKeySequence("Ctrl+T"), m_mainWindow);
+    QObject::connect(m_popupShortcut, &QxtGlobalShortcut::activated,
+        Application::instance()->popupWindow(), &PopupWindow::showClipboardTranslation);
+
+    m_vocabulary = new Vocabulary();
+    m_trainer = new Trainer(m_mainWindow);
+    m_trainer->setVocabulary(m_vocabulary);
+}
+
+Application::~Application()
+{
+    QSettings settings;
+    delete m_trainer;
+    delete m_vocabulary;
+    delete m_popupShortcut;
+    delete m_tray;
+    delete m_mainWindow;
+    delete m_popupWindow;
+    settings.setValue("Speaker/speechCmd", m_speaker->speechCmd());
+    delete m_speaker;
+    settings.setValue("Speaker/espeakCmd", m_ipaSpeaker->speechCmd());
+    delete m_ipaSpeaker;
+    delete m_dictCore;
+#ifdef QSTARDICT_WITH_TRANSLATIONS
+    removeTranslator(m_translator);
+    delete m_translator;
+    removeTranslator(m_qtTranslator);
+    delete m_qtTranslator;
+#endif // QSTARDICT_WITH_TRANSLATIONS
+}
+
+int Application::exec()
+{
+    QString text = commandLineText();
+    if (text.isEmpty())
+        m_mainWindow->showTranslation(text);
+    return QApplication::exec();
+}
+
+QString Application::commandLineText()
+{
+    QStringList args(arguments());
+    for(int i = 1; i < args.count(); ++i)
+    {
+        if(! args.at(i).startsWith('-'))
+            return args.at(i);
+    }
+    return QString();
+}
+
+void Application::saveSettingsAndQuit()
+{
+    m_dictCore->saveSettings();
+    m_mainWindow->saveSettings();
+    m_tray->saveSettings();
+    m_popupWindow->saveSettings();
+    m_trainer->saveSettings();
+    quit();
+}
+
+}
+
+// vim: tabstop=4 softtabstop=4 shiftwidth=4 expandtab cindent textwidth=120 formatoptions=tc
+

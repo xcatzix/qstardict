@@ -1,0 +1,64 @@
+/*****************************************************************************
+ * speaker.cpp - QStarDict, a dictionary application for learning languages  *
+ * Copyright (C) 2008 Alexander Rodin                                        *
+ *                                                                           *
+ * This program is free software; you can redistribute it and/or modify      *
+ * it under the terms of the GNU General Public License as published by      *
+ * the Free Software Foundation; either version 2 of the License, or         *
+ * (at your option) any later version.                                       *
+ *                                                                           *
+ * This program is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ * GNU General Public License for more details.                              *
+ *                                                                           *
+ * You should have received a copy of the GNU General Public License along   *
+ * with this program; if not, write to the Free Software Foundation, Inc.,   *
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               *
+ *****************************************************************************/
+
+#include "speaker.h"
+
+#include <QProcess>
+#include <QSettings>
+
+namespace QStarDict
+{
+
+Speaker::Speaker()
+{
+    m_speechProcess = new QProcess;
+}
+
+Speaker::~Speaker()
+{
+    delete m_speechProcess;
+}
+
+void Speaker::speak(const QString &word)
+{
+    if (m_speechCmd.isEmpty())
+        return;
+
+    if (m_speechProcess->state() != QProcess::NotRunning)
+    m_speechProcess->kill();
+    
+    QString s = m_speechCmd;
+    s.replace("%s", word);
+    QStringList cmdTokens = QProcess::splitCommand(s);
+    QString program = cmdTokens[0];
+    QStringList arguments = cmdTokens.sliced(1);
+    m_speechProcess->start(program, arguments, QIODeviceBase::WriteOnly);
+    if (! m_speechProcess->waitForStarted())
+        return;
+    if (! m_speechCmd.contains("%s"))
+    {
+        m_speechProcess->write(word.toUtf8());
+        m_speechProcess->closeWriteChannel();
+    }
+}
+
+}
+
+// vim: tabstop=4 softtabstop=4 shiftwidth=4 expandtab cindent textwidth=120 formatoptions=tc
+

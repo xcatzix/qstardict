@@ -1,0 +1,141 @@
+#############################################################################
+# qstardict.pro - QStarDict, a dictionary application for learning foreign  #
+#                 languages                                                 #
+# Copyright (C) 2008-2025 Alexander Rodin                                   #
+#                                                                           #
+# This program is free software; you can redistribute it and/or modify      #
+# it under the terms of the GNU General Public License as published by      #
+# the Free Software Foundation; either version 2 of the License, or         #
+# (at your option) any later version.                                       #
+#                                                                           #
+# This program is distributed in the hope that it will be useful,           #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of            #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             #
+# GNU General Public License for more details.                              #
+#                                                                           #
+# You should have received a copy of the GNU General Public License along   #
+# with this program; if not, write to the Free Software Foundation, Inc.,   #
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.               #
+#############################################################################
+
+TEMPLATE = app
+TARGET = qstardict
+macx {
+    TARGET = QStarDict
+}
+include(../qstardict.pri)
+
+FORMS += \
+    choosetranslationstage.ui \
+    cssedit.ui \
+    dictbrowsersearch.ui \
+    mainwindow.ui \
+    scatteredlettersstage.ui \
+    settingsdialog.ui \
+    trainingsummary.ui \
+    typeinstage.ui \
+    vocabularydialog.ui \
+    wordwithtranslationstage.ui
+HEADERS += \
+    application.h \
+    choosetranslationstage.h \
+    cssedit.h \
+    dictbrowser.h \
+    dictbrowsersearch.h \
+    dictcore.h \
+    ../plugins/dictplugin.h \
+    dictwidget.h \
+    ipa.h \
+    ipaspeaker.h \
+    keyboard.h \
+    mainwindow.h \
+    popupwindow.h \
+    resizablepopup.h \
+    scatteredletters.h \
+    scatteredlettersstage.h \
+    selection.h \
+    settingsdialog.h \
+    speaker.h \
+    trainer.h \
+    trainingsummary.h \
+    tray.h \
+    typeinstage.h \
+    vocabulary.h \
+    vocabularydialog.h \
+    wordfortraining.h \
+    wordwithtranslationstage.h
+unix:isEmpty(NO_DBUS):HEADERS += \
+    dbusadaptor.h
+SOURCES += \
+    application.cpp \
+    choosetranslationstage.cpp \
+    cssedit.cpp \
+    dictbrowser.cpp \
+    dictbrowsersearch.cpp \
+    dictcore.cpp \
+    dictwidget.cpp \
+    ipa.cpp \
+    ipaspeaker.cpp \
+    keyboard.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    popupwindow.cpp \
+    resizablepopup.cpp \
+    scatteredletters.cpp \
+    scatteredlettersstage.cpp \
+    selection.cpp \
+    settingsdialog.cpp \
+    speaker.cpp \
+    trainer.cpp \
+    trainingsummary.cpp \
+    tray.cpp \
+    typeinstage.cpp \
+    vocabulary.cpp \
+    vocabularydialog.cpp \
+    wordwithtranslationstage.cpp
+ unix:isEmpty(NO_DBUS):SOURCES += \
+    dbusadaptor.cpp
+
+# From https://github.com/hluk/CopyQ/tree/92ec805b41bd097cbe523c08e320e3d32fc1c511
+unix | win32 {
+    DEFINES += BUILD_QXT_GUI
+
+    HEADERS += ../qxt/qxtglobal.h
+    SOURCES += ../qxt/qxtglobal.cpp
+
+    HEADERS += ../qxt/qxtglobalshortcut.h
+    HEADERS += ../qxt/qxtglobalshortcut_p.h
+    SOURCES += ../qxt/qxtglobalshortcut.cpp
+
+    unix:!macx: SOURCES += ../qxt/qxtglobalshortcut_x11.cpp
+    macx: SOURCES += ../qxt/qxtglobalshortcut_mac.cpp
+    win32: SOURCES += ../qxt/qxtglobalshortcut_win.cpp
+
+    greaterThan(QT_MAJOR_VERSION, 4): unix {
+        QT += gui-private
+    }
+}
+
+RESOURCES += \
+    pixmaps/pixmaps.qrc
+win32:RC_FILE += \
+    qstardict.rc
+DISTFILES += \
+    qstardict.png \
+    qstardict.desktop
+
+target.path = $$BIN_DIR
+INSTALLS += target
+# translations *has* go after current target (mac required)
+isEmpty(NO_TRANSLATIONS):include("translations/translations.pri")
+
+unix:!macx {
+    desktop_icon.files = qstardict.png
+    desktop_icon.path = $$INSTALL_PREFIX/share/pixmaps
+    desktop_file.files = qstardict.desktop
+    desktop_file.path = $$INSTALL_PREFIX/share/applications
+    INSTALLS += desktop_icon desktop_file
+}
+macx {
+    ICON = pixmaps/qstardict.icns
+}
