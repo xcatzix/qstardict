@@ -1,4 +1,8 @@
 # qstardict
+# TODO
+   Program has problem,make it error....
+   
+
 **QStarDict** is a dictionary application for learning languages.
 
 # Main features
@@ -12,7 +16,6 @@ selected words
 * Pronunciation if IPA transcriptions in the translations
 * Plugins support
 * Training for studying words
-
 
 # =========install========
 You need Qt >= 7.0 and glib >= 2.0 in order to install QStarDict.
