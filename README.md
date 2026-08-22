@@ -1,4 +1,3 @@
-# qstardict
 # TODO
    Program has problem,make it error....
    
