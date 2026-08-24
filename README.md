@@ -1,5 +1,5 @@
 # TODO
-   Program has problem,make it error....
+webAPI=URL/%s={searchWord}/APIKEY=XXXXXXX/HOSTKEY=xxxxxxx
    
 
 **QStarDict** is a dictionary application for learning languages.
