@@ -6,28 +6,28 @@
 */
 
 # TODO
-# =============HOSTKEY生成===============
--- 增加终端查询接口;
 
--- 增加org.kstardict.dbus接口
+-- 增加终端查询接口,去掉GUI;
 
--- 增加daemon运行,因krunner需要字典dbus服务接口.
+-- 原有的DBus接口修改为org.kstardict.dbus接口
+
+-- 增加daemon运行,因需要利用krunner输入接口进行查询,所以需要字典的DBus服务接口.
 
 -- 增加字典词库读取配置文件,默认读取~/.local/share/kstardict/dict.config,
-	没有则读取/usr/share/kstardict/dict.config.
+   没有则读取/usr/share/kstardict/dict.config.
 	
 -- 修改用户字典词库默认读取路径为:~/.local/share/kstardict/dict,
-	没有则读取/usr/share/kstardict/dict目录,
-	需支持遍历dict子目录查找字典.
+   没有则读取/usr/share/kstardict/dict目录,
+   需支持遍历dict子目录查找字典.
 	
 -- 修改字典库名称格式,严格按照如下格式:
-	   EN-CN1.*, EN-CN2.*, 即[A-Z][A-Z]-[A-Z][A-Z][0-9].*
+	   EN-CN1.*,  EN-CN2.*,  即[A-Z][A-Z]-[A-Z][A-Z][0-9].*
 	   
 -- dict.config配置格式如下,查询时按用户排序从上往下依次检索:
 
 	[txt]         # qstardict默认格式
 	
-	dicts=EN-CN1.* EN-CN2.* EN-CN3.*
+	dicts=EN-CN1.*   EN-CN2.*   EN-CN3.*
 	
     [sql]   # sqlite格式,username和password默认为空,sqlite提供搜索字段为searchWord
    
@@ -36,21 +36,21 @@
 	
 	sqlitedict=SELECT *  FROM dictnAme WHERE searchWord={word}
 	
- # sqlite连接接口为sqlite, 没有则由用户软链接sqlite3等生成(sqlite -readonly "EN-CN1.db")
+ # sqlite连接接口为sqlite, 没有则由用户软链接sqlite3生成(sqlite -readonly "EN-CN1.db")
    
-   [http] # http API接口的定义
+    [http]      # http API接口的定义
    
-   htmlAPIs= htmlAPI1 htmlAPI2 htmlAPI3...
+    htmlAPIs= htmlAPI1  htmlAPI2  htmlAPI3...
    
-   htmlAPI1=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTkEY=xxxxxxxxx
+    htmlAPI1=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTkEY=xxxxxxxxx
    
-   htmlAPI2=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTKEY=xxxxxxxxx
+    htmlAPI2=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTKEY=xxxxxxxxx
    
-   htmlAPI3=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTKEY=xxxxxxxxx
+    htmlAPI3=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTKEY=xxxxxxxxx
    
-(* APIKEY是由服务网站生成的;HOSTKEY为用户自我生成,为注册信息; searchWord,APIKEY及HOSTKEY等字段需要封装,利于internet传输.)
+(* APIKEY是由服务网站生成的;HOSTKEY为用户自我生成,作为注册信息; searchWord,APIKEY及HOSTKEY等字段需要封装,利于internet传输.)
 
-# =============HOSTKEY生成===============
+# ====HOSTKEY生成====
 用户必须获取如下信息:
 # Windows
   获取MAC地址信息:
@@ -93,7 +93,7 @@ selected words
 * Plugins support
 * Training for studying words
 
-# =========install========
+ ====Introduction and install====
 You need Qt >= 7.0 and glib >= 2.0 in order to install QStarDict.
 
 On Debian and Ubuntu these dependencies can be installed by running
