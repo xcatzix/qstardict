@@ -1,4 +1,5 @@
 /*
+*
 * kstardict -a krunner-based dictionary
 * author: xcatzix
 * mailto: 343451012@qq.com
@@ -21,7 +22,7 @@
 	需支持遍历dict子目录查找字典.
 	
 -- 修改字典库名称格式,严格按照如下格式:
-	   EN-CN1.*,EN-CN2.*,即[A-Z][A-Z]-[A-Z][A-Z][0-9].*
+	   EN-CN1.*, EN-CN2.*, 即[A-Z][A-Z]-[A-Z][A-Z][0-9].*
 	   
 -- dict.config配置格式如下,查询时按用户排序从上往下依次检索:
 
@@ -29,13 +30,14 @@
 	
 	dicts=EN-CN1.* EN-CN2.* EN-CN3.*
 	
-   [sql]   # sqlite格式,username和password默认为空,sqlite提供搜索字段为searchWord
+    [sql]   # sqlite格式,username和password默认为空,sqlite提供搜索字段为searchWord
    
 	username:xxxx
 	password:xxxxx
 	
-	sqlitedict=SELECT *  FROM dictnAme WHERE searchWord={word} # sqlite连接接口为sqlite,
-   没有则由用户软链接sqlite3等生成(sqlite -readonly "EN-CN1.db")
+	sqlitedict=SELECT *  FROM dictnAme WHERE searchWord={word}
+	
+ # sqlite连接接口为sqlite, 没有则由用户软链接sqlite3等生成(sqlite -readonly "EN-CN1.db")
    
    [http] # http API接口的定义
    
@@ -47,7 +49,7 @@
    
    htmlAPI3=URL/%s={searchWord}/APIKEY=XXXXXXXXXXXXXX/HOSTKEY=xxxxxxxxx
    
-(* APIKEY是由服务网站生成的,HOSTKEY为用户自我生成;searchWord,APIKEY及HOSTKEY等字段需要封装,利于internet传输.)
+(* APIKEY是由服务网站生成的;HOSTKEY为用户自我生成,为注册信息; searchWord,APIKEY及HOSTKEY等字段需要封装,利于internet传输.)
 
 # =============HOSTKEY生成===============
 用户必须获取如下信息:
