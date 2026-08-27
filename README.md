@@ -1,5 +1,4 @@
 /*
-*
 * kstardict -a krunner-based dictionary
 * author: xcatzix
 * mailto: 343451012@qq.com
@@ -70,13 +69,11 @@
 ```terminal
     ifconfig en0 | grep ether
 ```
-(
-* 以上各系统MAC地址必须保留如下信息:
-    link/ether ac:vc:8f:20:4f:a3 brd ff:ff:ff:ff:ff:ff  (* 即网卡硬件地址行.)
-  ---用户可任意添加其他内容.---
-)
+(* 以上各系统MAC地址必须保留如下信息:link/ether ac:vc:8f:20:4f:a3 brd ff:ff:ff:ff:ff:ff  (* 即网卡硬件地址行.)
 
-将获取的各个地址保存在XX.txt文件内
+ * 用户可任意添加其他内容.)
+
+将获取的各个地址及用户自行添加的信息保存在XX.txt文件内
 ```terminal
     sha512sum /pAth/to/Your/XX.txt
 ```
