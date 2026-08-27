@@ -57,27 +57,27 @@
 ```cmd
    ipconfig /all
 ```
-
 # linux/unix
    获取 MAC 地址：‌
 ```terminal
     ip link show
 ```
-
 # macOS(MAC)系统
    获取 MAC 地址：
 ```terminal
     ifconfig en0 | grep ether
 ```
-(* 以上各系统MAC地址必须保留如下信息:link/ether ac:vc:8f:20:4f:a3 brd ff:ff:ff:ff:ff:ff  (* 即网卡硬件地址行.)
+( * 以上各系统MAC地址必须保留如下信息:link/ether ac:vc:8f:20:4f:a3 brd ff:ff:ff:ff:ff:ff  (* 即网卡硬件地址行.)
 
- * 用户可任意添加其他内容.)
+  * 用户可任意添加其他内容.)
 
 将获取的各个地址及用户自行添加的信息保存在XX.txt文件内
 ```terminal
     sha512sum /pAth/to/Your/XX.txt
 ```
 ------分割线---------
+
+====introduction====
 
 **QStarDict** is a dictionary application for learning languages.
 
@@ -93,7 +93,8 @@ selected words
 * Plugins support
 * Training for studying words
 
- ====Introduction and install====
+ ====install====
+ 
 You need Qt >= 7.0 and glib >= 2.0 in order to install QStarDict.
 
 On Debian and Ubuntu these dependencies can be installed by running
