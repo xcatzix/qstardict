@@ -5,6 +5,10 @@
 * 
 */
 
+# License:
+
+downloading, publishing and using it in paying money.
+
 # TODO
 
 -- 增加终端查询接口,去掉GUI;
