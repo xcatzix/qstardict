@@ -21,9 +21,11 @@
    需支持遍历dict子目录查找字典.
 	
 -- 修改字典库名称格式,严格按照如下格式:
-	   EN-CN1.*,  EN-CN2.*,  即[A-Z][A-Z]-[A-Z][A-Z][0-9].*
+	   EN-CN1.*    EN-CN2.*    即[A-Z][A-Z]-[A-Z][A-Z][0-9].*
 	   
 -- dict.config配置格式如下,查询时按用户排序从上往下依次检索:
+
+'''dict.config
 
 	[txt]         # qstardict默认格式
 	
@@ -34,9 +36,7 @@
 	username:xxxx
 	password:xxxxx
 	
-	sqlitedict=SELECT *  FROM dictnAme WHERE searchWord={word}
-	
- # sqlite连接接口为sqlite, 没有则由用户软链接sqlite3生成(sqlite -readonly "EN-CN1.db")
+	sqlitedict=SELECT *  FROM dictnAme WHERE searchWord={word}   (* sqliteX连接接口为sqlite, 没有则由用户软链接sqliteX生成(sqlite -readonly "EN-CN1.db")
    
     [http]      # http API接口的定义
    
@@ -50,32 +50,38 @@
    
 (* APIKEY是由服务网站生成的;HOSTKEY为用户自我生成,作为注册信息; searchWord,APIKEY及HOSTKEY等字段需要封装,利于internet传输.)
 
+'''
+
 # ====HOSTKEY生成====
 用户必须获取如下信息:
-# Windows
-  获取MAC地址信息:
-```cmd
+
+-- Windows获取MAC地址信息:
+  
+'''cmd
    ipconfig /all
-```
-# linux/unix
-   获取 MAC 地址：‌
-```terminal
+'''
+
+-- linux/unix获取 MAC 地址：‌
+
+'''terminal
     ip link show
-```
-# macOS(MAC)系统
-   获取 MAC 地址：
-```terminal
+'''
+
+-- macOS(MAC)系统获取 MAC 地址：
+
+'''terminal
     ifconfig en0 | grep ether
-```
-( * 以上各系统MAC地址必须保留如下信息:link/ether ac:vc:8f:20:4f:a3 brd ff:ff:ff:ff:ff:ff  (* 即网卡硬件地址行.)
+'''
 
-  * 用户可任意添加其他内容.)
+  * 以上各系统网卡地址必须保留如下信息:link/ether ac:vc:8f:20:4f:a3 brd ff:ff:ff:ff:ff:ff  (* 即网卡硬件地址行.)
 
-将获取的各个地址及用户自行添加的信息保存在XX.txt文件内
-```terminal
+  * 用户可任意添加其他内容.
+
+-- 将获取的各个地址及用户自行添加的信息保存在XX.txt文件内
+
+"""terminal
     sha512sum /pAth/to/Your/XX.txt
-```
-------分割线---------
+"""
 
 ====introduction====
 
