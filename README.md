@@ -138,6 +138,6 @@ By default the install prefix is /usr. To change it add
 to qmake arguments.
 
 To build and install:
-1)	qmake [switches] # or qmake6 [switches]
+1)	qmake6 [switches]
 2)	make
 3)	sudo make install
