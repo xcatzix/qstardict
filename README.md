@@ -91,6 +91,10 @@ downloading, publishing and using it in paying money.
 
 **QStarDict** is a dictionary application for learning languages.
 
+# 词库说明:
+
+*由于21世纪双向词库体积太大,暂时无法上传.现在usingDict1中只有一份简明EN->CN词库供使用.
+
 # Main features
 
 * Full support of StarDict 2.x dictionaries
